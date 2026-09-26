@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>耳朵与键盘 · 24 周训练系统导航站</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Noto+Serif+SC:wght@500;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg: oklch(0.175 0.012 80);
+  --bg-2: oklch(0.205 0.013 80);
+  --bg-3: oklch(0.24 0.015 78);
+  --ink: oklch(0.93 0.015 85);
+  --ink-dim: oklch(0.72 0.02 80);
+  --ink-mute: oklch(0.55 0.02 78);
+  --line: oklch(0.32 0.015 78);
+  --accent: oklch(0.62 0.16 32);
+  --accent-hi: oklch(0.68 0.17 32);
+  --accent-soft: oklch(0.28 0.05 35);
+  --paper: oklch(0.975 0.008 90);
+  --paper-ink: oklch(0.18 0.01 80);
+  --paper-dim: oklch(0.45 0.02 70);
+  --ease-in: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --sans: 'Geist', 'Noto Sans SC', -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --serif: 'Noto Serif SC', 'Songti SC', serif;
+  --mono: 'Geist Mono', 'Noto Sans SC', monospace;
+  --header-h: 64px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--header-h) + 16px)}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:var(--sans);font-weight:300;
+  font-size:16px;line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(60% 40% at 15% 0%, oklch(0.28 0.05 45 / 0.35), transparent 70%),
+    radial-gradient(50% 35% at 90% 90%, oklch(0.25 0.04 40 / 0.3), transparent 70%);
+}
+::selection{background:var(--accent);color:oklch(0.15 0.01 60)}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer}
+.mono{font-family:var(--mono);font-weight:400;letter-spacing:0.04em}
+.wrap{max-width:1240px;margin:0 auto;padding:0 clamp(20px,4vw,56px);position:relative;z-index:1}
+
+/* ---------- header ---------- */
+header{
+  position:fixed;top:0;left:0;right:0;z-index:100;height:var(--header-h);
+  display:flex;align-items:center;
+  background:oklch(0.175 0.012 80 / 0.82);
+  backdrop-filter:blur(14px) saturate(140%);
+  -webkit-backdrop-filter:blur(14px) saturate(140%);
+  border-bottom:1px solid transparent;
+  transition:border-color .3s,transform .3s var(--ease-out),opacity .3s;
+}
+header.scrolled{border-bottom-color:var(--line)}
+header.hidden{transform:translateY(-100%);opacity:0}
+header .wrap{width:100%;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.brand{display:flex;align-items:baseline;gap:12px;font-weight:500}
+.brand .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);align-self:center}
+.brand small{font-family:var(--mono);font-size:11px;color:var(--ink-mute);letter-spacing:.12em;text-transform:uppercase}
+nav.top{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+nav.top::-webkit-scrollbar{display:none}
+nav.top a{
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink-dim);padding:7px 12px;border-radius:99px;white-space:nowrap;
+  transition:color .45s var(--ease-in),background .3s;
+}
+nav.top a:hover{color:var(--ink)}
+nav.top a.active{color:var(--accent-hi);background:var(--accent-soft)}
+@media(max-width:900px){nav.top{display:none}}
+
+/* ---------- hero ---------- */
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding-top:calc(var(--header-h) + 40px);position:relative;overflow:hidden}
+.hero-meta{display:flex;flex-wrap:wrap;gap:10px 28px;font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:clamp(20px,3vh,40px)}
+.hero-meta b{color:var(--accent-hi);font-weight:500}
+h1.display{
+  font-family:var(--serif);font-weight:900;
+  font-size:clamp(52px,10.5vw,148px);
+  line-height:1.04;letter-spacing:0.01em;
+}
+h1.display .ch{display:inline-block;will-change:transform}
+h1.display .lat{font-family:var(--sans);font-weight:700;letter-spacing:-0.035em}
+.hero-sub{
+  max-width:640px;margin-top:clamp(20px,3vh,36px);
+  font-size:clamp(15px,1.4vw,18px);color:var(--ink-dim);
+}
+.hero-sub strong{color:var(--ink);font-weight:500}
+.pipeline{
+  margin-top:clamp(24px,4vh,44px);
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;
+  font-family:var(--mono);font-size:clamp(10.5px,1.05vw,13px);letter-spacing:.06em;
+}
+.pipeline .node{padding:5px 12px;border:1px solid var(--line);border-radius:99px;color:var(--ink-dim);transition:border-color .3s,color .45s var(--ease-in)}
+.pipeline .node:hover{border-color:var(--accent);color:var(--accent-hi)}
+.pipeline .arr{color:var(--accent);font-size:.85em}
+.kb{margin:clamp(36px,6vh,64px) calc(-1 * clamp(20px,4vw,56px)) 0;position:relative}
+.kb svg{display:block;width:100%;height:auto}
+.kb .glow{position:absolute;inset:-40% -10% auto;height:80%;background:radial-gradient(50% 100% at 50% 100%,oklch(0.62 0.16 32 / 0.14),transparent 70%);pointer-events:none}
+.scroll-hint{position:absolute;top:calc(var(--header-h) + 48px);right:clamp(20px,4vw,56px);writing-mode:vertical-rl;font-family:var(--mono);font-size:10.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--ink-mute);display:flex;align-items:center;gap:14px}
+.scroll-hint::after{content:"";width:1px;height:56px;background:linear-gradient(var(--accent),transparent);animation:drop 2.2s var(--ease-out) infinite}
+@keyframes drop{0%{transform:scaleY(0);transform-origin:top}55%{transform:scaleY(1);transform-origin:top}56%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* ---------- sections ---------- */
+section{padding:clamp(72px,10vh,128px) 0;position:relative}
+.sec-head{display:flex;align-items:baseline;gap:18px;margin-bottom:clamp(36px,5vh,64px);border-bottom:1px solid var(--line);padding-bottom:20px;flex-wrap:wrap}
+.sec-head .no{font-family:var(--mono);font-size:12px;color:var(--accent-hi);letter-spacing:.14em}
+.sec-head h2{font-family:var(--serif);font-weight:700;font-size:clamp(28px,3.6vw,46px);letter-spacing:.01em;line-height:1.2}
+.sec-head .en{margin-left:auto;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-mute)}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(26px);transition:opacity .7s var(--ease-in),transform .7s var(--ease-in)}
+.rv.on{opacity:1;transform:none}
+
+/* principles */
+.plist{display:grid;grid-template-columns:1fr;gap:0;border-top:1px solid var(--line)}
+.prow{display:grid;grid-template-columns:88px 1fr;gap:clamp(16px,3vw,48px);padding:clamp(24px,3.5vh,40px) 0;border-bottom:1px solid var(--line);transition:background .3s}
+.prow:hover{background:oklch(0.21 0.014 78 / .5)}
+.prow .no{font-family:var(--mono);font-size:12px;color:var(--ink-mute);padding-top:8px;letter-spacing:.1em}
+.prow h3{font-family:var(--serif);font-weight:700;font-size:clamp(19px,2vw,25px);margin-bottom:10px}
+.prow h3 em{font-style:normal;color:var(--accent-hi)}
+.prow p{color:var(--ink-dim);max-width:720px}
+.prow .flow{display:flex;flex-wrap:wrap;gap:4px 10px;font-family:var(--mono);font-size:12.5px;color:var(--ink);margin:10px 0;letter-spacing:.05em}
+.prow .flow .arr{color:var(--accent)}
+.prow .avoid{color:var(--ink-mute);font-size:14.5px}
+.prow .avoid::before{content:"✕ ";color:var(--accent);font-family:var(--mono)}
+@media(max-width:640px){.prow{grid-template-columns:56px 1fr}}
+
+/* daily template */
+.day-grid{display:grid;grid-template-columns:1.25fr .8fr;gap:clamp(28px,4vw,64px);align-items:start}
+@media(max-width:900px){.day-grid{grid-template-columns:1fr}}
+.bar{display:flex;height:88px;border:1px solid var(--line);border-radius:14px;overflow:hidden;margin:22px 0 14px}
+.bar .seg{display:flex;flex-direction:column;justify-content:center;padding:0 14px;border-right:1px solid var(--line);min-width:0;transition:background .3s;position:relative}
+.bar .seg:last-child{border-right:none}
+.bar .seg:hover{background:var(--accent-soft)}
+.bar .seg .t{font-family:var(--mono);font-size:12px;color:var(--accent-hi)}
+.bar .seg .n{font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink)}
+.bar-note{font-family:var(--mono);font-size:11px;color:var(--ink-mute);letter-spacing:.08em}
+.ditems{list-style:none;margin-top:26px}
+.ditems li{display:grid;grid-template-columns:96px 1fr;gap:18px;padding:14px 0;border-bottom:1px dashed var(--line);font-size:15px}
+.ditems li .t{font-family:var(--mono);font-size:12px;color:var(--accent-hi);padding-top:3px}
+.ditems li b{font-weight:500}
+.ditems li span{color:var(--ink-dim);font-size:14px;display:block}
+.min-box{border:1px solid var(--line);border-radius:14px;padding:clamp(22px,3vw,32px);background:var(--bg-2)}
+.min-box .tag{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-hi);display:block;margin-bottom:14px}
+.min-box h3{font-family:var(--serif);font-weight:700;font-size:22px;margin-bottom:18px}
+.min-steps{list-style:none;counter-reset:m}
+.min-steps li{counter-increment:m;display:flex;gap:14px;padding:10px 0;border-bottom:1px dashed var(--line);font-size:14.5px;color:var(--ink-dim)}
+.min-steps li:last-child{border-bottom:none}
+.min-steps li::before{content:"0" counter(m);font-family:var(--mono);font-size:11px;color:var(--ink-mute);padding-top:4px}
+.min-steps li b{color:var(--ink);font-weight:500}
+.min-box .ps{margin-top:16px;font-size:13.5px;color:var(--ink-mute)}
+
+/* stages */
+.stage-layout{display:grid;grid-template-columns:280px 1fr;gap:clamp(28px,4vw,72px);align-items:start}
+@media(max-width:960px){.stage-layout{grid-template-columns:1fr}.stage-rail{position:static!important;display:flex;overflow-x:auto;gap:8px;padding-bottom:8px}}
+.stage-rail{position:sticky;top:calc(var(--header-h) + 28px);display:flex;flex-direction:column;gap:2px}
+.rail-link{display:grid;grid-template-columns:52px 1fr auto;align-items:baseline;gap:12px;padding:11px 14px;border-radius:10px;font-size:14px;color:var(--ink-dim);transition:background .3s,color .45s var(--ease-in);white-space:nowrap}
+.rail-link .no{font-family:var(--mono);font-size:11px;color:var(--ink-mute)}
+.rail-link .wk{font-family:var(--mono);font-size:10.5px;color:var(--ink-mute);letter-spacing:.06em}
+.rail-link:hover{color:var(--ink);background:var(--bg-2)}
+.rail-link.active{color:var(--ink);background:var(--accent-soft)}
+.rail-link.active .no{color:var(--accent-hi)}
+.stage{border:1px solid var(--line);border-radius:18px;background:var(--bg-2);margin-bottom:22px;overflow:hidden;scroll-margin-top:calc(var(--header-h) + 20px)}
+.stage-head{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;padding:clamp(22px,3vw,34px);cursor:pointer;user-select:none}
+.stage-head .l{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap}
+.stage-head .sno{font-family:var(--mono);font-size:12px;color:var(--accent-hi);letter-spacing:.14em}
+.stage-head h3{font-family:var(--serif);font-weight:700;font-size:clamp(21px,2.4vw,30px)}
+.stage-head .wk{font-family:var(--mono);font-size:11.5px;color:var(--ink-mute);letter-spacing:.1em}
+.stage-head .pm{width:34px;height:34px;border:1px solid var(--line);border-radius:50%;display:grid;place-items:center;position:relative;flex-shrink:0;transition:border-color .3s,background .3s}
+.stage-head .pm::before,.stage-head .pm::after{content:"";position:absolute;background:var(--ink-dim);transition:transform 350ms cubic-bezier(0.4,0,0.2,1),background .3s}
+.stage-head .pm::before{width:12px;height:1.5px}
+.stage-head .pm::after{width:1.5px;height:12px}
+.stage.open .stage-head .pm{background:var(--accent);border-color:var(--accent)}
+.stage.open .stage-head .pm::before{background:oklch(0.15 0.01 60)}
+.stage.open .stage-head .pm::after{transform:scaleY(0);background:oklch(0.15 0.01 60)}
+.stage-body{max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(0.4,0,0.2,1)}
+.stage-inner{padding:0 clamp(22px,3vw,34px) clamp(26px,3.5vw,38px);display:grid;gap:26px}
+.stage .goal{border-left:2px solid var(--accent);padding:4px 0 4px 18px;color:var(--ink);font-size:16px;max-width:640px}
+.stage .goal small{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-hi);margin-bottom:6px}
+.scols{display:grid;grid-template-columns:1fr 1fr;gap:26px clamp(26px,3vw,44px)}
+@media(max-width:760px){.scols{grid-template-columns:1fr}}
+.scol h4,.full-col h4{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:14px;font-weight:500}
+.exlist{list-style:none}
+.exlist li{padding:11px 0;border-bottom:1px dashed var(--line);font-size:14.5px;color:var(--ink-dim);display:flex;gap:12px}
+.exlist li:last-child{border-bottom:none}
+.exlist li::before{content:"·";color:var(--accent);font-weight:700}
+.exlist li b{color:var(--ink);font-weight:500}
+.gate{list-style:none}
+.gate li{display:flex;gap:12px;align-items:flex-start;padding:9px 0;border-bottom:1px dashed var(--line);font-size:14.5px;color:var(--ink-dim)}
+.gate li:last-child{border-bottom:none}
+.gate input{appearance:none;width:17px;height:17px;border:1px solid var(--ink-mute);border-radius:5px;flex-shrink:0;margin-top:4px;cursor:pointer;position:relative;transition:background .2s,border-color .2s}
+.gate input:checked{background:var(--accent);border-color:var(--accent)}
+.gate input:checked::after{content:"";position:absolute;left:5px;top:1.5px;width:4px;height:8px;border:solid oklch(0.15 0.01 60);border-width:0 1.6px 1.6px 0;transform:rotate(42deg)}
+.gate li:has(input:checked){color:var(--ink-mute);text-decoration:line-through;text-decoration-color:oklch(0.62 0.16 32 / .5)}
+.labgrid{display:flex;flex-wrap:wrap;gap:8px}
+.lab{font-family:var(--mono);font-size:12px;padding:7px 13px;border:1px solid var(--line);border-radius:99px;color:var(--ink-dim)}
+.lab b{color:var(--accent-hi);font-weight:500;margin-right:7px}
+
+/* lab wall */
+.labwall{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:12px}
+.labcell{border:1px solid var(--line);border-radius:14px;padding:18px;background:var(--bg);transition:transform 160ms,box-shadow 160ms,border-color 160ms;position:relative;overflow:hidden}
+.labcell:hover{transform:translateY(-2px);border-color:var(--accent);box-shadow:0 16px 40px -18px oklch(0 0 0 / .6)}
+.labcell .wk{font-family:var(--mono);font-size:11px;color:var(--accent-hi);letter-spacing:.14em;display:block;margin-bottom:10px}
+.labcell p{font-size:14.5px;color:var(--ink-dim);line-height:1.6}
+.labcell .stg{position:absolute;top:16px;right:16px;font-family:var(--mono);font-size:10px;color:var(--ink-mute)}
+.labcell.milestone{border-color:var(--accent);background:linear-gradient(160deg,var(--accent-soft),var(--bg) 60%)}
+.labcell.milestone p{color:var(--ink)}
+
+/* protocols */
+.proto-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(28px,4vw,56px);align-items:start}
+@media(max-width:900px){.proto-grid{grid-template-columns:1fr}}
+.proto-main{border:1px solid var(--line);border-radius:18px;padding:clamp(24px,3vw,40px);background:var(--bg-2)}
+.ptag{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-hi)}
+.proto-main h3{font-family:var(--serif);font-weight:700;font-size:clamp(22px,2.4vw,30px);margin:12px 0 26px}
+.steps{list-style:none;counter-reset:st}
+.steps li{counter-increment:st;display:grid;grid-template-columns:52px 1fr;gap:16px;padding:15px 0;border-bottom:1px dashed var(--line)}
+.steps li:last-child{border-bottom:none}
+.steps li .n{font-family:var(--mono);font-size:12px;color:var(--accent-hi);padding-top:3px}
+.steps li b{font-weight:500;display:block;margin-bottom:2px}
+.steps li span{font-size:14px;color:var(--ink-dim)}
+.proto-side{display:grid;gap:18px}
+.side-box{border:1px solid var(--line);border-radius:16px;padding:clamp(20px,2.4vw,28px);background:var(--bg-2)}
+.side-box h4{font-family:var(--serif);font-weight:700;font-size:18px;margin-bottom:12px}
+.side-note{font-size:13.5px;color:var(--ink-mute);margin-bottom:14px}
+.levels{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px}
+.lvl{border:1px solid var(--line);border-radius:10px;padding:10px 8px;text-align:center;transition:border-color .3s,background .3s}
+.lvl:hover{border-color:var(--accent);background:var(--accent-soft)}
+.lvl .l{font-family:var(--mono);font-size:10px;color:var(--accent-hi);display:block;letter-spacing:.1em}
+.lvl .v{font-size:13px;color:var(--ink-dim)}
+.tflow{display:flex;flex-direction:column;align-items:flex-start;gap:2px;font-size:13.5px;color:var(--ink-dim)}
+.tflow i{font-style:normal;color:var(--accent);font-size:11px;line-height:1.2;padding-left:6px}
+.tflow span{border:1px solid var(--line);border-radius:8px;padding:4px 12px;background:var(--bg)}
+.prio{list-style:none;counter-reset:pr}
+.prio li{counter-increment:pr;display:flex;gap:12px;padding:8px 0;border-bottom:1px dashed var(--line);font-size:14px;color:var(--ink-dim)}
+.prio li:last-child{border-bottom:none}
+.prio li::before{content:counter(pr,decimal-leading-zero);font-family:var(--mono);font-size:11px;color:var(--ink-mute);padding-top:3px}
+.prio li:first-child{color:var(--ink)}
+.prio li:first-child::before{color:var(--accent-hi)}
+.side-box.warn{border-color:oklch(0.62 0.16 32 / .45)}
+.side-box.warn h4{color:var(--accent-hi)}
+#avoidList b{color:var(--ink-dim);font-weight:400}
+
+/* tools */
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.tool{border:1px solid var(--line);border-radius:16px;padding:clamp(20px,2.4vw,28px);background:var(--bg);transition:transform 160ms,box-shadow 160ms,border-color 160ms}
+.tool:hover{transform:translateY(-2px);border-color:var(--accent);box-shadow:0 16px 40px -18px oklch(0 0 0 / .6)}
+.tool .tk{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-hi);display:block;margin-bottom:12px}
+.tool h3{font-family:var(--serif);font-weight:700;font-size:20px;margin-bottom:10px}
+.tool p{font-size:14px;color:var(--ink-dim)}
+.tool ul{list-style:none;margin-top:12px}
+.tool ul li{font-size:13.5px;color:var(--ink-dim);padding:7px 0;border-top:1px dashed var(--line);display:flex;gap:10px}
+.tool ul li::before{content:"·";color:var(--accent);font-weight:700}
+.tool ul li b{color:var(--ink);font-weight:500}
+.rule-band{margin-top:26px;border:1px solid var(--accent);border-radius:16px;padding:clamp(20px,2.6vw,30px);display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center;background:linear-gradient(120deg,var(--accent-soft),transparent 55%)}
+.rule-band .mono{font-size:11px;letter-spacing:.2em;color:var(--accent-hi)}
+.rule-band p{font-size:15px;color:var(--ink-dim);max-width:860px}
+.rule-band b{color:var(--ink);font-weight:500}
+
+/* tests & diagnosis */
+.test-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4vw,64px);align-items:start}
+@media(max-width:900px){.test-grid{grid-template-columns:1fr}}
+.sub-h{font-family:var(--serif);font-weight:700;font-size:clamp(19px,2vw,24px);margin-bottom:20px}
+.tests{display:grid;gap:10px}
+.trow{border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:grid;grid-template-columns:74px 1fr;gap:16px;background:var(--bg-2);transition:border-color .3s}
+.trow:hover{border-color:var(--accent)}
+.trow .id{font-family:var(--mono);font-size:12px;color:var(--accent-hi);padding-top:3px;letter-spacing:.1em}
+.trow b{font-weight:500;font-size:15px}
+.trow span{display:block;font-size:13.5px;color:var(--ink-dim)}
+.diag{display:grid;gap:0;border-top:1px solid var(--line)}
+.drow{border-bottom:1px solid var(--line)}
+.drow button{all:unset;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;width:100%;padding:15px 4px;cursor:pointer;box-sizing:border-box}
+.drow button .q{font-size:15px;color:var(--ink);font-weight:400}
+.drow button .no{font-family:var(--mono);font-size:11px;color:var(--ink-mute)}
+.drow button .arw{font-family:var(--mono);font-size:12px;color:var(--accent-hi);transition:transform 350ms cubic-bezier(0.4,0,0.2,1)}
+.drow.open button .arw{transform:rotate(90deg)}
+.dans{max-height:0;overflow:hidden;transition:max-height 350ms cubic-bezier(0.4,0,0.2,1)}
+.dans p{padding:0 4px 18px 44px;font-size:14px;color:var(--ink-dim)}
+.dans b{color:var(--accent-hi);font-weight:500}
+
+/* check card (paper) */
+.paper-sec{background:var(--paper);color:var(--paper-ink)}
+.checkcard{max-width:760px;margin:0 auto clamp(48px,7vh,80px);background:#fff;border:1px solid oklch(0.88 0.01 80);border-radius:20px;padding:clamp(28px,4vw,52px);box-shadow:0 30px 70px -30px oklch(0.2 0.01 80 / .25)}
+.ctag{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent)}
+.checkcard h2{font-family:var(--serif);font-weight:900;font-size:clamp(28px,3.4vw,42px);margin:10px 0 8px}
+.clead{color:var(--paper-dim);font-size:15px;margin-bottom:24px}
+.cq{list-style:none;counter-reset:q}
+.cq li{counter-increment:q;display:flex;gap:16px;align-items:flex-start;padding:16px 0;border-bottom:1px dashed oklch(0.86 0.01 80);font-size:clamp(16px,1.6vw,18.5px)}
+.cq li::before{content:"Q" counter(q);font-family:var(--mono);font-size:11px;color:var(--accent);padding-top:6px;letter-spacing:.08em;flex-shrink:0}
+.cans{margin-top:22px;font-size:14.5px;color:var(--paper-dim)}
+.cans::before{content:"✓ ";color:var(--accent);font-weight:700}
+.milestones{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,3vw,44px);max-width:1080px;margin:0 auto}
+@media(max-width:820px){.milestones{grid-template-columns:1fr}}
+.mtag{font-size:12px;letter-spacing:.16em;color:var(--accent)}
+.ms h3{font-family:var(--serif);font-weight:700;font-size:22px;margin:8px 0 14px}
+.ms p{font-size:14.5px;color:var(--paper-dim)}
+.ms-ps{margin-top:12px;color:var(--paper-ink)!important;font-weight:500}
+.msflow{font-size:14px;line-height:2.1;color:var(--paper-ink);border-left:2px solid var(--accent);padding-left:16px;margin-bottom:4px}
+.finale{max-width:860px;margin:clamp(56px,8vh,96px) auto 0;text-align:center}
+.finale p{color:var(--paper-dim);font-size:15px}
+.finale .big{font-family:var(--serif);font-weight:700;font-size:clamp(21px,2.8vw,32px);line-height:1.6;color:var(--paper-ink);margin-top:16px}
+
+/* footer */
+footer{border-top:1px solid var(--line);padding:34px 0;background:var(--bg)}
+.foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--ink-mute)}
+.foot .mono{font-size:11px;letter-spacing:.14em}
+
+/* ai prompt box */
+.pbox{border:1px solid var(--line);border-radius:14px;background:var(--bg);overflow:hidden}
+.pbox-head{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px dashed var(--line);flex-wrap:wrap}
+.pbox-head .ptag2{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-hi);white-space:nowrap}
+.pbox-head .phint{font-size:12.5px;color:var(--ink-mute);flex:1;min-width:200px}
+.pactions{display:flex;gap:8px}
+.pbtn{font-family:var(--mono);font-size:11px;letter-spacing:.08em;padding:6px 14px;border-radius:99px;border:1px solid var(--line);background:transparent;color:var(--ink-dim);transition:color .45s var(--ease-in),border-color .3s,background .3s}
+.pbtn:hover{color:var(--ink);border-color:var(--accent)}
+.pbtn.done{color:var(--accent-hi);border-color:var(--accent);background:var(--accent-soft)}
+.pta{display:block;width:100%;background:transparent;border:none;outline:none;resize:none;color:var(--ink-dim);font-family:var(--mono);font-size:13px;line-height:1.85;padding:16px 18px;min-height:150px;caret-color:var(--accent)}
+.pta:focus{color:var(--ink)}
+.pbox-foot{display:flex;justify-content:space-between;padding:8px 16px;border-top:1px dashed var(--line);font-family:var(--mono);font-size:10.5px;color:var(--ink-mute);letter-spacing:.06em}
+.pbox-foot .saved{color:var(--accent-hi);opacity:0;transition:opacity .3s}
+.pbox-foot .saved.show{opacity:1}
+</style>
+</head>
+<body>
+
+<header id="hdr">
+  <div class="wrap">
+    <a class="brand" href="#top"><span class="dot"></span>耳朵与键盘<small>Ear × Keys · 24W</small></a>
+    <nav class="top" id="topnav">
+      <a href="#principles">原则</a>
+      <a href="#daily">每日模板</a>
+      <a href="#stages">阶段</a>
+      <a href="#lab">Music Lab</a>
+      <a href="#protocols">协议</a>
+      <a href="#tools">工具</a>
+      <a href="#tests">测试诊断</a>
+      <a href="#check">检查卡</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ================= HERO ================= -->
+<div class="hero wrap" id="top">
+  <span class="scroll-hint">Scroll · 开始训练</span>
+  <div class="hero-meta rv">
+    <span><b>24</b> 周</span><span><b>7</b> 个阶段</span><span><b>40–50</b> 分钟 / 天</span><span><b>1</b> 个声音成果 / 周</span>
+  </div>
+  <h1 class="display rv" id="heroTitle">音乐创作者的<br>耳朵与键盘</h1>
+  <p class="hero-sub rv">目标不是成为钢琴家、职业歌手或视唱练耳考试选手，而是打通<strong>「脑内音乐 → MIDI → 音乐」</strong>的完整链路——为独立创作、编曲、制作，以及未来具有完整世界观与叙事性的游戏原声带，建立底层能力。</p>
+  <div class="pipeline rv" id="pipeline"></div>
+  <div class="kb rv">
+    <div class="glow"></div>
+    <svg id="pianoSvg" viewBox="0 0 1400 210" preserveAspectRatio="xMidYMax meet" aria-label="钢琴键盘"></svg>
+  </div>
+</div>
+
+<!-- ================= 01 PRINCIPLES ================= -->
+<section id="principles">
+  <div class="wrap">
+    <div class="sec-head rv"><span class="no">01</span><h2>训练总原则</h2><span class="en">Six Principles</span></div>
+    <div class="plist">
+      <div class="prow rv"><span class="no">P·01</span><div>
+        <h3>耳朵先于手，<em>但手必须跟上耳朵</em></h3>
+        <p class="avoid">手指碰巧弹出来 → 才知道自己写了什么</p>
+        <div class="flow"><span>我知道自己想听到什么</span><span class="arr">→</span><span>唱出来</span><span class="arr">→</span><span>键盘找到</span><span class="arr">→</span><span>记录下来</span></div>
+        <p>所有重要的键盘训练都应该问一句：「我弹这个音之前，是否已经知道自己想听到它？」</p>
+      </div></div>
+      <div class="prow rv"><span class="no">P·02</span><div>
+        <h3>首调 / 音级是主轴，<em>音名是键盘地图</em></h3>
+        <div class="flow"><span>Do Re Mi Fa Sol La Ti</span><span class="arr">＝</span><span>1 2 3 4 5 6 7</span></div>
+        <p>例如 Do → Mi → Sol 首先理解为 1 → 3 → 5，而不是只记 C → E → G。音名仍然要熟悉——MIDI、键盘和乐谱都需要它。固定调不作为前期主系统。</p>
+      </div></div>
+      <div class="prow rv"><span class="no">P·03</span><div>
+        <h3>音程早期出现，<em>但不成为主轴</em></h3>
+        <p>第 3 周左右开始接触音程，但优先「旋律上下文中的音程」，而不是孤立地刷「这是大三度还是小三度」。Do → Mi 先感受到 1 → 3，再知道它是大三度。孤立音程 App 每天最多约 5 分钟，只作辅助。</p>
+      </div></div>
+      <div class="prow rv"><span class="no">P·04</span><div>
+        <h3>FL Studio 第一周就能用，<em>但只当「录音纸」</em></h3>
+        <p class="avoid">Mixer · EQ · Compressor · Automation · Synth · Mixing · Mastering · 高级编曲——暂时都不系统学</p>
+        <p>FL Studio 目前只负责一件事：把我已经找到的音乐留下来。哼唱 → 键盘找到 → MIDI → 保存。</p>
+      </div></div>
+      <div class="prow rv"><span class="no">P·05</span><div>
+        <h3>从第一周开始，<em>每周留下一个可以听的东西</em></h3>
+        <p>成果不一定是一首歌。可以是 4 个音的旋律、一段扒谱、一个奇怪和弦、一个 8 小节 melody、一段和声实验、一个 30 秒 loop。重点是：每周都留下一个可以听的东西。</p>
+      </div></div>
+      <div class="prow rv"><span class="no">P·06</span><div>
+        <h3>按能力推进，<em>不按日期推进</em></h3>
+        <p>24 周只是参考。如果某阶段没有达到过关标准，就不进入下一阶段——不要因为「第 5 周到了」就强行学习第 5 周的内容。</p>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 02 DAILY ================= -->
+<section id="daily" style="background:var(--bg-2)">
+  <div class="wrap">
+    <div class="sec-head rv"><span class="no">02</span><h2>每天的基本训练模板</h2><span class="en">Daily Template</span></div>
+    <div class="day-grid">
+      <div class="rv">
+        <h3 style="font-family:var(--serif);font-weight:700;font-size:clamp(20px,2.2vw,26px)">标准日 <span class="mono" style="color:var(--accent-hi);font-size:.7em">40–50 MIN</span></h3>
+        <div class="bar" aria-label="每日时间分配">
+          <div class="seg" style="flex:10"><span class="t">10′</span><span class="n">键盘</span></div>
+          <div class="seg" style="flex:10"><span class="t">10′</span><span class="n">视唱</span></div>
+          <div class="seg" style="flex:8"><span class="t">5–10′</span><span class="n">听觉</span></div>
+          <div class="seg" style="flex:13"><span class="t">10–15′</span><span class="n">创作转换</span></div>
+          <div class="seg" style="flex:5"><span class="t">5′</span><span class="n">自由实验</span></div>
+        </div>
+        <span class="bar-note">比例 = 分钟数 · 悬停查看各环节</span>
+        <ul class="ditems">
+          <li><span class="t">键盘 10′</span><div><b>找音 · 音阶 · 三和弦 · 简单伴奏 · 旋律</b></div></li>
+          <li><span class="t">视唱 10′</span><div><b>首调 · 音级 · 模唱 · 看谱唱</b></div></li>
+          <li><span class="t">听觉 5–10′</span><div><b>音级 · 音程 · 节奏 · 和弦</b></div></li>
+          <li><span class="t">创作 10–15′</span><div><b>脑内旋律 → 哼唱 → 找音 → 键盘 → MIDI</b><span>这是每天的核心转化环节</span></div></li>
+          <li><span class="t">实验 5′</span><div><b>随便弹——但弹完必须知道自己大概弹了什么</b></div></li>
+        </ul>
+      </div>
+      <div class="min-box rv">
+        <span class="tag">Busy Day Fallback</span>
+        <h3>最低配训练 · 20 分钟</h3>
+        <ol class="min-steps">
+          <li><span><b>5′</b> Do / 音级</span></li>
+          <li><span><b>5′</b> 模唱</span></li>
+          <li><span><b>5′</b> 唱 → 找音</span></li>
+          <li><span><b>5′</b> 记录自己的旋律</span></li>
+        </ol>
+        <p class="ps">不要因为没有 1 小时就完全放弃。20 分钟的最低配，也是在维持「耳朵 → 手」的连接。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 03 STAGES ================= -->
+<section id="stages">
+  <div class="wrap">
+    <div class="sec-head rv"><span class="no">03</span><h2>七个阶段 · 全程导航</h2><span class="en">Stage 00 — 06</span></div>
+    <div class="stage-layout">
+      <aside class="stage-rail" id="rail">
+        <a class="rail-link" href="#stage-0"><span class="no">S·00</span><span>键盘地图</span><span class="wk">W01</span></a>
+        <a class="rail-link" href="#stage-1"><span class="no">S·01</span><span>音级 → 键盘</span><span class="wk">W02–04</span></a>
+        <a class="rail-link" href="#stage-2"><span class="no">S·02</span><span>旋律 · 音程 · 和弦</span><span class="wk">W05–08</span></a>
+        <a class="rail-link" href="#stage-3"><span class="no">S·03</span><span>先唱，再弹</span><span class="wk">W09–12</span></a>
+        <a class="rail-link" href="#stage-4"><span class="no">S·04</span><span>听觉分析</span><span class="wk">W13–16</span></a>
+        <a class="rail-link" href="#stage-5"><span class="no">S·05</span><span>五线谱 → 内听</span><span class="wk">W17–20</span></a>
+        <a class="rail-link" href="#stage-6"><span class="no">S·06</span><span>创作者模式</span><span class="wk">W21–24</span></a>
+      </aside>
+      <div id="stagePanels"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 04 MUSIC LAB ================= -->
+<section id="lab" style="background:var(--bg-2)">
+  <div class="wrap">
+    <div class="sec-head rv"><span class="no">04</span><h2>每周 Music Lab</h2><span class="en">Weekly Output · W01–W24</span></div>
+    <p class="rv" style="max-width:640px;color:var(--ink-dim);margin-bottom:36px">每周一个可以听的声音成果。不是考试，是留档——证明「耳朵 → 手 → MIDI」这条路每周都走通了一次。</p>
+    <div class="labwall" id="labwall"></div>
+  </div>
+</section>
+
+<!-- ================= 05 PROTOCOLS ================= -->
+<section id="protocols">
+  <div class="wrap">
+    <div class="sec-head rv"><span class="no">05</span><h2>核心协议</h2><span class="en">Protocols</span></div>
+    <div class="proto-grid">
+      <div class="proto-main rv">
+        <span class="ptag">最重要的一张卡</span>
+        <h3>脑内音乐 → MIDI · 九步协议</h3>
+        <ol class="steps" id="nineSteps"></ol>
+      </div>
+      <div class="proto-side">
+        <div class="side-box rv">
+          <h4>扒谱协议 · 六个级别</h4>
+          <p class="side-note">不要从「我一定要扒完整首歌」开始。</p>
+          <div class="levels" id="transLevels"></div>
+          <div class="tflow">
+            <span>听整段</span><i>↓</i><span>确定调性感</span><i>↓</i><span>找落点</span><i>↓</i><span>找第一个音</span><i>↓</i><span>判断轮廓</span><i>↓</i><span>唱</span><i>↓</i><span>找音</span><i>↓</i><span>MIDI</span><i>↓</i><span>回听</span><i>↓</i><span>修正</span>
+          </div>
+        </div>
+        <div class="side-box rv">
+          <h4>键盘训练优先级</h4>
+          <ol class="prio" id="kbPrio"></ol>
+        </div>
+        <div class="side-box warn rv">
+          <h4>暂缓 · 不要花大量时间</h4>
+          <p class="side-note" id="avoidList"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 06 TOOLS ================= -->
+<section id="tools" style="background:var(--bg-2)">
+  <div class="wrap">
+    <div class="sec-head rv"><span class="no">06</span><h2>工具与资源栈</h2><span class="en">Toolbox</span></div>
+    <div class="tool-grid" id="toolGrid"></div>
+    <div class="rule-band rv">
+      <span class="mono">RULE</span>
+      <p>乐谱资源不要拿来「看答案」。正确用法：<b>听 → 自己唱/扒 → 自己记录 → 再看谱 → 找差异</b>。直接打开谱看到「哦原来这里是 E」，你的耳朵没有获得任何训练。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 07 TESTS ================= -->
+<section id="tests">
+  <div class="wrap">
+    <div class="sec-head rv"><span class="no">07</span><h2>量化测试与卡住诊断</h2><span class="en">Test & Debug</span></div>
+    <div class="test-grid">
+      <div class="rv">
+        <h3 class="sub-h">每 4 周一次的量化测试</h3>
+        <div class="tests" id="testList"></div>
+      </div>
+      <div class="rv">
+        <h3 class="sub-h">卡住时先诊断，不要乱补课</h3>
+        <div class="diag" id="diagList"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 08 CHECK ================= -->
+<section id="check" class="paper-sec">
+  <div class="wrap">
+    <div class="checkcard rv">
+      <span class="ctag mono">Final Daily Check</span>
+      <h2>每日检查卡</h2>
+      <p class="clead">每天坐到键盘前，不需要想「今天我要学什么音乐课」，只问五个问题：</p>
+      <ul class="cq" id="checkQ"></ul>
+      <p class="cans">如果每天都在回答「是」——那么这套训练就在起作用。</p>
+    </div>
+    <div class="milestones">
+      <div class="ms rv">
+        <span class="mono mtag">M+3</span>
+        <h3>3 个月后应该发生什么</h3>
+        <p>不是「我钢琴入门了」，而是：能唱简单旋律、能找到它、认识主要音级、弹基本三和弦、做简单 melody + chords、扒短旋律、知道「怪声音」怪在哪里、能把脑中的简单音乐变成 MIDI。</p>
+        <p class="ms-ps">这些成立 → 就可以把乐理、FL Studio、作曲、编曲正式接回来。</p>
+      </div>
+      <div class="ms rv">
+        <span class="mono mtag">M+6</span>
+        <h3>6 个月后的理想状态</h3>
+        <div class="msflow">想象 ↓ 哼唱 ↓ 稳定重复 ↓ 判断轮廓 ↓ 找到调性感 ↓ 用 1–2–3–4–5 唱 ↓ 键盘找到 ↓ MIDI ↓ 配和弦 ↓ 修改 ↓ 编曲 ↓ 放进 FL Studio</div>
+        <p class="ms-ps">这就是整个计划的终点：闭环形成。</p>
+      </div>
+    </div>
+    <div class="finale rv">
+      <p>最终的长期目标，不是很强的钢琴技术，也不是视唱练耳考试 95 分——</p>
+      <p class="big">我听得见我想创造的东西。我能唱出来，能在键盘上找到它，能把它变成 MIDI，能分析它为什么成立，能故意改变它，能把它发展成音乐。</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <span>耳朵与键盘 · 24 周训练系统导航站</span>
+    <span class="mono">EAR × KEYS — SING FIRST, PLAY SECOND</span>
+  </div>
+</footer>
+
+<script>
+/* ============ data ============ */
+const PIPE = ['脑内音乐','内听','哼唱 / 歌唱','音级 / 音程理解','键盘定位','MIDI','回听','分析','修改'];
+
+const STAGES = [
+ {id:0, no:'S·00', wk:'WEEK 01', title:'建立键盘地图',
+  goal:'想到一个音名 → 快速找到键；弹 Do → 能唱 Do Re Mi…',
+  ex:[['键盘地图 5′','随机说 C / D / F / G / A 并找到它，逐渐加入 B♭ / F♯ / E♭ / A♭。目标不是速度，是空间感觉。'],
+      ['八度定位 3′','找到一个 C，闭眼寻找其他八度的 C，睁眼检查。'],
+      ['C 大调 5′','弹 C D E F G A B C，同时唱 Do Re Mi Fa Sol La Ti Do，然后反向。'],
+      ['听唱 5′','弹 C 唱 Do；弹 C–E 唱 Do–Mi；逐渐扩展。'],
+      ['第一个 Music Lab','录下 Do–Re–Mi–Re–Do，保存 MIDI：week01_doremi.mid']],
+  gate:['随机给出 10 个自然音名，至少 9 个能在约 3 秒内找到（不要求熟练弹奏）'],
+  labs:[['W01','Do–Re–Mi–Re–Do']]},
+ {id:1, no:'S·01', wk:'WEEK 02–04', title:'建立「音级 → 键盘」的连接',
+  goal:'开始从 C → D → E 转向 1 → 2 → 3。',
+  ex:[['Tonic → Degree','弹 Do，要求自己先唱出 Mi——不要先弹。唱出 Do → Mi，再找键。'],
+      ['随机音级','弹 Do，随机指定 2–7：先唱，再弹。'],
+      ['模唱','弹 Do–Re–Mi，离开键盘唱出来再检查；逐渐加到 4 → 5 → 6 音。'],
+      ['轮廓训练','听 / 弹一个旋律，只回答：上行 ↑、下行 ↓、重复 =。暂不要求具体音。'],
+      ['简单扒谱','每次只扒 2–4 个音：听 → 哼 → 找第一个音 → 找后续音 → 唱 → 弹 → MIDI。']],
+  gate:['播放简单 4 小节旋律：能哼出来','能判断大致轮廓','能找到主音','能用数字 / 首调唱出主要音级','键盘能够复现（允许少量错误，不靠试琴）'],
+  labs:[['W02','4 音旋律'],['W03','扒喜欢歌曲 4–8 个音'],['W04','自己写 8 小节旋律']]},
+ {id:2, no:'S·02', wk:'WEEK 05–08', title:'旋律、音程与基础和弦',
+  goal:'第一个真正的「音乐制作能力」阶段。',
+  ex:[['大调音阶','先掌握 C / G / F / D / B♭，不追求 12 调熟练；看见音级 → 知道它在调里的位置。'],
+      ['音程（第 5 周正式加入）','第一层 Do→Re / Mi / Fa / Sol；第二层 Re→Fa、Mi→Sol、Sol→Do；第三层结合扒谱：先判断「大概跳了三度」，再确认具体音。'],
+      ['三和弦','major / minor / diminished → 大调内 I ii iii IV V vi vii°。先建立声音：I 有回家感，V 有张力，IV 有离开感，vi 有另一种稳定 / 阴影感。'],
+      ['键盘','左手根音 → 右手三和弦 → 左手根音 + 右手和弦。']],
+  gate:['在熟悉的大调中唱出 1–7','听简单旋律后大致判断音级关系','键盘上弹出常见大调三和弦','用左手根音 + 右手和弦配一个简单旋律'],
+  labs:[['W05','扒一个 8 小节旋律'],['W06','给它配 I–V–vi–IV'],['W07','同一旋律换三组和弦'],['W08','30 秒 melody + chords（不追求混音）']]},
+ {id:3, no:'S·03', wk:'WEEK 09–12', title:'先唱，再弹',
+  goal:'整个训练的关键阶段：右手不允许无意识乱跑，每一次重要旋律先唱、再弹。',
+  ex:[['旋律制造（每天）','选和弦循环 → 听 10 秒 → 停 → 脑中想旋律 → 哼出 → 键盘找 → 录 MIDI。'],
+      ['左手 + 右手','左手 I–V–vi–IV，右手弹唱出的旋律；逐渐变成左手自己维持和声、右手寻找旋律。'],
+      ['简单即兴','给自己限制：只用 1–2–3–5 / 只用五声音阶 / 只用一个八度。限制越多越好——目标是主动控制声音。'],
+      ['「怪东西」分析','建 strange_sounds/ 每周记录 3 个：弹了什么 → 听感 → 音程 → 可能的和弦 → 换低音 → 放进旋律。先描述根音 + 音程 + 听感，不急命名。']],
+  gate:['随机哼一个 4–8 小节旋律，能稳定唱出 → 键盘找到 → MIDI 记录','30 分钟内完成一个 4 小节简单旋律的捕获（准确率不必 100%，但不能完全靠乱试）'],
+  labs:[['W09','主题 A'],['W10','主题 A 的变体'],['W11','A + B'],['W12','1 分钟音乐']]},
+ {id:4, no:'S·04', wk:'WEEK 13–16', title:'从旋律进入真正的听觉分析',
+  goal:'音程、节奏听写、旋律听写、和弦性质、调性感、看谱唱——轮换进行，不要每天全练。',
+  ex:[['周一 / 三 / 五 · 旋律日','视唱 + 模唱 + 听写。'],
+      ['周二 / 四 · 和声日','三和弦 + I IV V vi + 低音。'],
+      ['周六 · 扒谱日','完整扒 8–16 小节。'],
+      ['周日 · 创作日','不用做题，直接写音乐。'],
+      ['节奏听写','4/4 起步，只练 quarter / eighth / half / whole，再加休止：听到 → 拍出 → 写出 → MIDI 验证。'],
+      ['旋律听写','顺序固定：轮廓 → 节奏 → 音级 → 五线谱。不要一上来写五线谱。'],
+      ['和弦听觉','先 Major / Minor → I / IV / V → ii / iii / vi；七和弦暂时只认识 V7。']],
+  gate:['给一个 4–8 小节简单旋律：能模唱','能拍节奏','能找调','能大致写出音级','键盘复现并与原曲比较','目标不是 100 分，而是能定位错误来自哪里'],
+  labs:[['W13–16','扒谱 → 分析 → 模仿 → 改写']]},
+ {id:5, no:'S·05', wk:'WEEK 17–20', title:'五线谱 → 内听 → 声音',
+  goal:'正式加强 sight-singing。核心教材：A New Approach to Sight Singing（7th Edition）。',
+  ex:[['① 找调','确定 Do 在哪里。'],
+      ['② 看拍号','知道节奏框架。'],
+      ['③ 看轮廓','例如 ↑ ↑ ↓ = ↑。'],
+      ['④ 找落点','看哪些音是 1 / 3 / 5。'],
+      ['⑤ 默唱','不要马上发声，在脑中先走一遍。'],
+      ['⑥ 唱','然后才唱出来。'],
+      ['⑦ 键盘验证','最后才用键盘核对。']],
+  gate:['看到 8 小节简单大调旋律：先默唱 / 内听，再唱出来','如果仍然必须「看 C → 找 C → 看 D → 找 D」，说明真正的内听还没建立'],
+  labs:[['W17–20','主题 → 和声 → 伴奏 → 配器']]},
+ {id:6, no:'S·06', wk:'WEEK 21–24', title:'创作者模式',
+  goal:'把训练接回 FL Studio + 作曲 + 编曲，耳朵训练仍然保留。',
+  ex:[['Project A','脑内旋律 → MIDI。'],
+      ['Project B','扒 8–16 小节游戏 OST。'],
+      ['Project C','从一个动机发展出 30–60 秒音乐。'],
+      ['Project D','一个旋律，做三种和声。'],
+      ['Project E','一个主题，写两个不同情绪版本。'],
+      ['Project F','1–2 分钟完整小曲——这时才开始明显增加编曲、音色、MIDI editing、automation、DAW workflow。']],
+  gate:['能独立完成简单音乐片段','完成一个 1–2 分钟完整小曲——不是毕业作品，只是证明闭环已经形成'],
+  labs:[['W21–24','完成 1–2 分钟完整小曲']]}
+];
+
+const PROMPTS = [
+`你是一位熟悉视唱练耳与流行键盘教学的 AI 音乐教练。
+我正在执行一套 24 周「耳朵与键盘」训练系统，目标是未来能独立创作游戏原声带。当前处于【第 1 周 · 阶段 0：建立键盘地图】——做到想到一个音名就能快速找到键，弹 Do 能唱出 Do Re Mi。
+我的核心原则：首调 / 音级为主轴，先唱后弹，每周留下一个可听的声音成果。
+请为我设计本周 7 天的训练内容，每天 40–50 分钟（键盘 10′ / 视唱 10′ / 听觉 5–10′ / 创作转换 10–15′ / 自由实验 5′），包括：
+1. 每天的「随机音名找键」具体组合与渐进安排（从 C D F G A 逐步加入 B♭ F♯ E♭ A♭）；
+2. 八度定位与 C 大调唱名练习的具体步骤和变式；
+3. 一条只含自然音的 4 音旋律，作为本周 Music Lab（week01_doremi.mid）的备选；
+4. 第 7 天的自测方案（对应过关标准：随机 10 个自然音名，9 个能在 3 秒内找到）。`,
+
+`你是一位熟悉视唱练耳与流行键盘教学的 AI 音乐教练。
+我正在执行一套 24 周「耳朵与键盘」训练系统，目标是未来能独立创作游戏原声带。当前处于【第 2–4 周 · 阶段 1：建立「音级 → 键盘」的连接】——从 C→D→E 转向用 1→2→3 思考。
+我的核心原则：首调 / 音级为主轴，先唱后弹，不完全依赖试琴，每周留下一个可听成果。
+请为我设计这 3 周的渐进训练计划，每天 40–50 分钟，包括：
+1. Tonic → Degree 练习（弹 Do 先唱出指定音级再找键）的具体流程与难度阶梯；
+2. 模唱练习从 4 音到 6 音的材料设计（请直接给出若干条用数字记谱的旋律）；
+3. 轮廓训练材料：写出若干段旋律的走向描述（↑ ↓ =），让我先判断再验证；
+4. 每周 Music Lab 的安排（W2 四音旋律 / W3 扒歌 4–8 音 / W4 原创 8 小节）与检查点；
+5. 阶段末自测方案（对应过关标准：哼得出、判轮廓、找主音、唱音级、键盘复现）。`,
+
+`你是一位熟悉视唱练耳与流行键盘教学的 AI 音乐教练。
+我正在执行一套 24 周「耳朵与键盘」训练系统，目标是未来能独立创作游戏原声带。当前处于【第 5–8 周 · 阶段 2：旋律、音程与基础和弦】——第一个真正的音乐制作能力阶段。
+我的核心原则：首调 / 音级为主轴，音程嵌在旋律上下文中学习，先唱后弹，每周留下一个可听成果。
+请为我设计这 4 周的训练计划，每天 40–50 分钟，包括：
+1. C / G / F / D / B♭ 五个大调的音级熟悉方案（看见音级就知道在调里的位置）；
+2. 三层音程练习的具体材料：Do→Re/Mi/Fa/Sol → Re→Fa、Mi→Sol、Sol→Do → 结合扒谱判断跳进；
+3. 三和弦 major/minor/diminished 与大调内 I ii iii IV V vi vii° 的听感建立练习（I 回家感、V 张力、IV 离开感、vi 阴影感）；
+4. 左手根音 + 右手和弦的伴奏型进阶；
+5. 每周 Music Lab（W5 扒 8 小节 / W6 配 I–V–vi–IV / W7 一旋律三和声 / W8 三十秒成品）的具体执行步骤与自测点。`,
+
+`你是一位熟悉视唱练耳与流行键盘教学的 AI 音乐教练。
+我正在执行一套 24 周「耳朵与键盘」训练系统，目标是未来能独立创作游戏原声带。当前处于【第 9–12 周 · 阶段 3：先唱，再弹】——整个训练最关键的阶段，右手不允许无意识乱跑。
+我的核心原则：每一次重要旋律先唱再弹，用限制驱动即兴，每周留下一个可听成果。
+请为我设计这 4 周的训练计划，每天 40–50 分钟，包括：
+1. 每日「旋律制造」流程的细化：和弦循环选择建议（给我几个适合练习的进行）、听 10 秒后构思旋律的具体方法；
+2. 左手 I–V–vi–IV 维持和声 + 右手唱出旋律的分手 / 合手阶梯；
+3. 限制即兴练习设计：只用 1-2-3-5、只用五声音阶、只用一个八度，各配具体任务；
+4. 「怪东西」分析模板：帮我设计 strange_sounds/ 每周 3 条的记录与分析格式（根音 + 音程 + 听感，不急命名）；
+5. 阶段末自测：30 分钟内把随机哼出的 4 小节旋律稳定唱出 → 键盘找到 → MIDI 记录。`,
+
+`你是一位熟悉视唱练耳与流行键盘教学的 AI 音乐教练。
+我正在执行一套 24 周「耳朵与键盘」训练系统，目标是未来能独立创作游戏原声带。当前处于【第 13–16 周 · 阶段 4：从旋律进入真正的听觉分析】——采用轮换制：周一三五旋律日、周二四和声日、周六扒谱日、周日创作日。
+我的核心原则：听写顺序固定为轮廓 → 节奏 → 音级 → 五线谱，目标是能定位错误来自哪里，而不是考试满分。
+请为我设计这 4 周的轮换训练计划，包括：
+1. 节奏听写材料：4/4 拍，从 quarter/eighth/half/whole 起步逐步加入休止，请直接给出节奏型练习（用文字或拍号描述）；
+2. 旋律听写练习：若干条 4–8 小节简单旋律，按轮廓 → 节奏 → 音级 → 五线谱的顺序引导我做；
+3. 和弦听觉路径：Major/Minor 分辨 → I/IV/V → ii/iii/vi → 认识 V7 的练习方法；
+4. 扒谱日从 8 小节到 16 小节的选曲难度建议与拆解流程；
+5. 阶段末综合自测（模唱 / 拍节奏 / 找调 / 写音级 / 键盘复现 / 与原曲比较）。`,
+
+`你是一位熟悉视唱练耳与流行键盘教学的 AI 音乐教练。
+我正在执行一套 24 周「耳朵与键盘」训练系统，目标是未来能独立创作游戏原声带。当前处于【第 17–20 周 · 阶段 5：五线谱 → 内听 → 声音】——正式加强 sight-singing，核心教材是 A New Approach to Sight Singing（7th Edition）。
+我的核心原则：先默唱内听再发声，绝不能逐音找琴键，首调 movable-Do。
+请为我设计这 4 周的视唱训练计划，包括：
+1. 每次视唱的七步流程落地：找调 → 看拍号 → 看轮廓 → 找落点（1/3/5）→ 默唱 → 唱 → 键盘验证，给出每步的具体做法和常见坑；
+2. 教材使用方法：每次 1–3 个练习如何选择与搭配，而不是从第一页机械刷；
+3. 补充练习材料：每周提供若干条 8 小节以内的简单大调旋律（数字记谱 + 五线谱描述），并标注轮廓与落点；
+4. 内听能力的专项训练（看到谱不出声在脑中走一遍）的具体方法；
+5. 阶段末自测：看 8 小节简单大调旋律，先默唱 / 内听再唱出。`,
+
+`你是一位熟悉视唱练耳、流行键盘与编曲教学的 AI 音乐教练。
+我正在执行一套 24 周「耳朵与键盘」训练系统，目标是未来能独立创作游戏原声带。当前处于【第 21–24 周 · 阶段 6：创作者模式】——把训练接回 FL Studio + 作曲 + 编曲，耳朵训练仍然保留。
+我的核心原则：脑内旋律 → MIDI 的闭环已经建立，现在每周至少完成一个小项目。
+请为我设计这 4 周的创作计划，包括：
+1. 六个小项目（A 脑内旋律→MIDI / B 扒 8–16 小节游戏 OST / C 动机发展 30–60 秒 / D 一旋律三和声 / E 一个主题两种情绪 / F 一至两分钟完整小曲）的执行顺序与每周安排；
+2. 适合扒谱的游戏 OST 推荐方向（旋律清晰、和声典型的曲目类型）；
+3. 动机发展手法清单（重复、模进、变奏、展开等）配合具体练习；
+4. 一至两分钟小曲的结构模板（如 A–A′–B–A）与配器入门建议；
+5. 这个阶段可以开始学的 DAW 技能清单（编曲 / 音色 / MIDI editing / automation / workflow）的优先级排序；
+6. 结业自测：完成一个 1–2 分钟完整小曲，验证「耳朵 → 手 → MIDI → 音乐」闭环。`
+];
+
+const LABS = [
+ ['W01','Do–Re–Mi–Re–Do',0],['W02','自己唱一个 4 音旋律',0],['W03','扒喜欢歌曲的 4–8 个音',0],['W04','8 小节原创旋律',0],
+ ['W05','一个旋律 + 一个和弦',1],['W06','一个旋律 + I–V–vi–IV',1],['W07','同一旋律 3 种和声',1],['W08','30 秒音乐',1],
+ ['W09','主题 A',2],['W10','主题 A 的变体',2],['W11','A + B',2],['W12','1 分钟音乐',2],
+ ['W13–16','扒谱 → 分析 → 模仿 → 改写',3,true],['W17–20','主题 → 和声 → 伴奏 → 配器',3,true],
+ ['W21–24','1–2 分钟完整小曲：证明耳朵 → 手 → MIDI → 音乐闭环形成',3,true]
+];
+
+const NINE = [
+ ['立即保存原始想法','旋律突然出现时先用手机录下来，不要马上打开 FL——开软件的过程中旋律可能已经变了。'],
+ ['判断轮廓','第一个音到第二个音是 ↑ ↓ 还是 =？记录如：↑ ↑ ↓ = ↓。'],
+ ['只唱节奏','例如 ta — ta-ta — taa，先不要管音高。'],
+ ['稳定化','连续唱 3 遍；如果每次都不一样，不要找音，继续唱到基本一致。'],
+ ['寻找主音','问「它最终最想落在哪里？」找到后弹 Do，反复唱。'],
+ ['用数字 / 首调唱','例如 1–3–2–1–5 → 唱 Do–Mi–Re–Do–Sol。'],
+ ['键盘定位','现在才找 C–E–D–C–G。如果错了，回到唱——不要疯狂试琴。'],
+ ['输入 MIDI','实时弹奏或 Piano Roll 输入。FL Studio 此刻只是记录工具。'],
+ ['回听校验','对照原始哼唱逐项检查：音高 / 节奏 / 八度 / 调性感——或者，原始旋律本身是不是就没想清楚？']
+];
+
+const LEVELS = [['LV·1','2–4 音'],['LV·2','一个乐句'],['LV·3','4 小节'],['LV·4','8 小节'],['LV·5','16 小节'],['LV·6','完整段落']];
+
+const KBPRIO = ['键盘地图（任意音快速定位）','大调音阶','三和弦','根音 + 和弦','右手旋律','左手 + 右手','看谱弹简单旋律','听觉找音','即兴'];
+
+const AVOID = '<b>高速钢琴技巧 · 考级曲目 · 哈农大量重复 · 高难度古典曲目 · 大量七和弦 · 复杂爵士和声 · 绝对音高训练 · 孤立音程刷题 · 复杂调式体系</b>——都不是这 24 周的主线。';
+
+const TOOLS = [
+ {k:'Sight Singing · 核心教材', n:'A New Approach to Sight Singing（7th Edition）', p:'第 5 周以后逐渐作为视唱主线。不要一天刷几十页，每次 1–3 个练习，重点是：内听 → 唱。', ul:null},
+ {k:'Course Reference', n:'Berklee Ear Training 1', p:'不需要购买课程，把它当课程设计参考：12 周 movable-Do，训练旋律、节奏、和声、视唱、听写、内听。', ul:[['早期顺序','大调 / movable Do → 小二度 → 大二度 → 三度 → I 和弦 → 旋律跳进 → 和声关系']]},
+ {k:'Ear Training · 辅助', n:'Teoria', p:'定位是 5–10 分钟的辅助工具，不要当主课程。', ul:[['早期','Key and Note Ear Training'],['第 3 周后','Interval Ear Training'],['第 5–8 周','Triad Ear Training'],['后期','Rhythm / Dictation']]},
+ {k:'Notation · 免费开源', n:'MuseScore Studio', p:'免费制谱 + 看谱 + MIDI 输入 + MIDI ↔ 乐谱，打通五线谱 ↔ MIDI ↔ 视唱。', ul:[['最适合回答','「我刚刚听出来的东西到底怎么写？」']]},
+ {k:'DAW · 录音纸', n:'FL Studio', p:'目前只负责把已经找到的音乐留下来：哼唱 → 键盘找到 → MIDI → 保存。', ul:[['暂不系统学','Mixer / EQ / Compressor / Synth / Mixing / Mastering']]},
+ {k:'Transcription', n:'扒谱工具（不追求神器）', p:'需要的功能只有：变速、循环、A/B 对比、音频标记、必要时改变音高。', ul:[['真正重要的','能不能把 8 秒音乐听 30 遍而不烦——0.5–1 秒的小片段完全可以反复循环']]}
+];
+
+const TESTS = [
+ ['A','脑内旋律','随机想一个 4 小节旋律 → 5 分钟内录下原始哼唱'],
+ ['B','声音 → MIDI','30 分钟内完成 4 小节简单旋律（允许修正）'],
+ ['C','听 → 键盘','播放简单旋律 → 先唱，再在键盘复现'],
+ ['D','看谱 → 声音','看 4–8 小节大调旋律 → 先默唱，再唱'],
+ ['E','和声','听 I–IV–V–I → 能否感受到离开 → 张力 → 回家'],
+ ['F','怪声音','随便弹个不寻常的东西 → 能否说出弹了哪些音、为什么不稳定']
+];
+
+const DIAG = [
+ ['我找不到脑中的音','不要去学更多和弦。先检查：<b>你是不是根本没有把旋律稳定唱出来？</b>'],
+ ['唱得出来，但键盘找不到','练：<b>音级 → 键盘</b>。'],
+ ['键盘会找，但不会唱','减少键盘辅助，加强 <b>Do → 音级 → 唱</b>。'],
+ ['扒谱一直靠试琴','强制：<b>先唱</b>。'],
+ ['即兴总是乱','限制：<b>只用 1、2、3、5</b>。'],
+ ['看谱不会唱','不要继续刷谱，改成：<b>看调 → 看轮廓 → 默唱 → 再唱</b>。'],
+ ['学了一堆理论，却不会创作','停止理论输入一周，只做：<b>听 → 唱 → 找 → 弹 → 记录</b>。']
+];
+
+const CHECKQ = ['今天我能不能唱出几个我脑中的声音？','我唱出来以后能不能找到？','我找到以后能不能记录？','我能不能听懂自己刚刚弹了什么？','今天有没有留下一个声音实验？'];
+
+/* ============ render ============ */
+const $ = s => document.querySelector(s);
+
+/* pipeline */
+$('#pipeline').innerHTML = PIPE.map((n,i)=>`<span class="node">${n}</span>${i<PIPE.length-1?'<span class="arr">→</span>':''}`).join('');
+
+/* piano keyboard: 3 octaves starting at C3, middle C labelled Do..Ti */
+(function piano(){
+  const svg = $('#pianoSvg');
+  const W=1400, H=210, octaves=3, whitesPerOct=7;
+  const total=octaves*whitesPerOct, ww=W/total, wh=H, bw=ww*0.62, bh=H*0.62;
+  const names=['Do','Re','Mi','Fa','Sol','La','Ti'];
+  const blackAfter=[0,1,3,4,5]; // C D F G A have black keys after
+  let html='';
+  for(let i=0;i<total;i++){
+    const x=i*ww, oct=Math.floor(i/7), deg=i%7;
+    const isMid = oct===1;
+    html+=`<rect x="${x+0.75}" y="0" width="${ww-1.5}" height="${wh}" rx="5" fill="${isMid?'oklch(0.94 0.02 88)':'oklch(0.88 0.015 88)'}" stroke="oklch(0.175 0.012 80)" stroke-width="1.5" class="wk-key" data-i="${i}"/>`;
+    if(isMid) html+=`<text x="${x+ww/2}" y="${wh-16}" text-anchor="middle" font-family="Geist Mono,monospace" font-size="15" fill="oklch(0.35 0.05 50)" letter-spacing="1">${names[deg]}</text>`;
+    if(isMid&&deg===0) html+=`<circle cx="${x+ww/2}" cy="${wh-44}" r="4.5" fill="oklch(0.62 0.16 32)"/>`;
+  }
+  for(let i=0;i<total-1;i++){
+    const deg=i%7;
+    if(blackAfter.includes(deg)){
+      const x=(i+1)*ww-bw/2;
+      html+=`<rect x="${x}" y="0" width="${bw}" height="${bh}" rx="4" fill="oklch(0.2 0.012 78)" stroke="oklch(0.09 0.008 70)" stroke-width="1.5" class="bk-key"/>`;
+    }
+  }
+  svg.innerHTML=html;
+  /* gentle key-hover press */
+  svg.querySelectorAll('rect').forEach(r=>{
+    r.addEventListener('mouseenter',()=>{r.style.transition='transform .18s cubic-bezier(0.23,1,0.32,1), fill .18s';r.style.transform='translateY(3px)';if(r.classList.contains('wk-key'))r.style.fill='oklch(0.85 0.06 55)';});
+    r.addEventListener('mouseleave',()=>{r.style.transform='';if(r.classList.contains('wk-key'))r.style.fill='';});
+  });
+})();
+
+/* stages */
+$('#stagePanels').innerHTML = STAGES.map((s,idx)=>`
+ <article class="stage rv ${idx===0?'open':''}" id="stage-${s.id}">
+  <div class="stage-head" role="button" tabindex="0" aria-expanded="${idx===0}">
+    <div class="l"><span class="sno">${s.no}</span><h3>${s.title}</h3><span class="wk">${s.wk}</span></div>
+    <span class="pm"></span>
+  </div>
+  <div class="stage-body"><div class="stage-inner">
+    <p class="goal"><small>核心目标</small>${s.goal}</p>
+    <div class="scols">
+      <div class="scol"><h4>训练内容</h4><ul class="exlist">${s.ex.map(e=>`<li><span><b>${e[0]}</b> — ${e[1]}</span></li>`).join('')}</ul></div>
+      <div>
+        <div class="scol"><h4>过关标准（勾选记录进度）</h4><ul class="gate">${s.gate.map((g,gi)=>`<li><input type="checkbox" id="g${s.id}-${gi}" data-k="gate-s${s.id}-${gi}"><label for="g${s.id}-${gi}">${g}</label></li>`).join('')}</ul></div>
+        <div class="full-col" style="margin-top:22px"><h4>Music Lab</h4><div class="labgrid">${s.labs.map(l=>`<span class="lab"><b>${l[0]}</b>${l[1]}</span>`).join('')}</div></div>
+      </div>
+    </div>
+    <div class="pbox" data-stage="${s.id}">
+      <div class="pbox-head">
+        <span class="ptag2">AI Prompt · 向 AI 索要本阶段资源</span>
+        <span class="phint">预填内容可直接修改——改完复制发给 AI，就是本周实际的训练内容</span>
+        <span class="pactions">
+          <button class="pbtn copy-btn" type="button">复制</button>
+          <button class="pbtn reset-btn" type="button">重置</button>
+        </span>
+      </div>
+      <textarea class="pta" data-k="prompt-s${s.id}" spellcheck="false"></textarea>
+      <div class="pbox-foot"><span class="cc"></span><span class="saved">已保存到本地</span></div>
+    </div>
+  </div></div>
+ </article>`).join('');
+
+/* lab wall */
+$('#labwall').innerHTML = LABS.map(l=>`
+ <div class="labcell rv ${l[3]?'milestone':''}">
+   <span class="wk">${l[0]}</span><span class="stg">${['S00–01','S02','S03','S04–06'][l[2]]}</span>
+   <p>${l[1]}</p>
+ </div>`).join('');
+
+/* nine steps */
+$('#nineSteps').innerHTML = NINE.map((s,i)=>`<li><span class="n">STEP ${i}</span><span><b>${s[0]}</b><span>${s[1]}</span></span></li>`).join('');
+
+/* levels / prio / avoid */
+$('#transLevels').innerHTML = LEVELS.map(l=>`<div class="lvl"><span class="l">${l[0]}</span><span class="v">${l[1]}</span></div>`).join('');
+$('#kbPrio').innerHTML = KBPRIO.map(k=>`<li>${k}</li>`).join('');
+$('#avoidList').innerHTML = AVOID;
+
+/* tools */
+$('#toolGrid').innerHTML = TOOLS.map(t=>`
+ <div class="tool rv">
+   <span class="tk">${t.k}</span><h3>${t.n}</h3><p>${t.p}</p>
+   ${t.ul?`<ul>${t.ul.map(u=>`<li><span><b>${u[0]}</b>　${u[1]}</span></li>`).join('')}</ul>`:''}
+ </div>`).join('');
+
+/* tests */
+$('#testList').innerHTML = TESTS.map(t=>`<div class="trow"><span class="id">TEST ${t[0]}</span><span><b>${t[1]}</b><span>${t[2]}</span></span></div>`).join('');
+
+/* diagnosis */
+$('#diagList').innerHTML = DIAG.map((d,i)=>`
+ <div class="drow">
+   <button aria-expanded="false"><span class="no">情况 ${i+1}</span><span class="q">${d[0]}</span><span class="arw">→</span></button>
+   <div class="dans"><p>${d[1]}</p></div>
+ </div>`).join('');
+
+/* check questions */
+$('#checkQ').innerHTML = CHECKQ.map(q=>`<li>${q}</li>`).join('');
+
+/* ============ interactions ============ */
+/* hero title: split chars for scroll letter-parallax */
+(function(){
+  const h = $('#heroTitle');
+  const parts = h.innerHTML.split('<br>');
+  h.innerHTML = parts.map(line=>[...line].map(c=>`<span class="ch">${c}</span>`).join('')).join('<br>');
+  const chars = h.querySelectorAll('.ch');
+  const depths = [3.0,3.75,4.7,5.95,7.5,9.45,11.9];
+  let ticking=false;
+  function par(){
+    const y = Math.min(window.scrollY, window.innerHeight);
+    const p = y / window.innerHeight;
+    chars.forEach((c,i)=>{ c.style.transform = `translate3d(0, ${(-p*depths[i%depths.length]*10).toFixed(2)}px, 0)`; });
+    ticking=false;
+  }
+  window.addEventListener('scroll',()=>{ if(!ticking){requestAnimationFrame(par);ticking=true;} },{passive:true});
+})();
+
+/* reveal with stagger */
+(function(){
+  const io = new IntersectionObserver(es=>{
+    es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('on'); io.unobserve(e.target);} });
+  },{threshold:.12, rootMargin:'0px 0px -6% 0px'});
+  document.querySelectorAll('.rv').forEach((el,i)=>{
+    el.style.transitionDelay = (i%6)*90+'ms';
+    io.observe(el);
+  });
+})();
+
+/* header hide/show */
+(function(){
+  const hdr=$('#hdr'); let last=0;
+  window.addEventListener('scroll',()=>{
+    const y=window.scrollY;
+    hdr.classList.toggle('scrolled',y>10);
+    if(y>320 && y>last+4) hdr.classList.add('hidden');
+    else if(y<last-4 || y<320) hdr.classList.remove('hidden');
+    last=y;
+  },{passive:true});
+})();
+
+/* stage accordion */
+document.querySelectorAll('.stage').forEach(st=>{
+  const head=st.querySelector('.stage-head'), body=st.querySelector('.stage-body');
+  function setH(){ body.style.maxHeight = st.classList.contains('open') ? body.scrollHeight+'px' : '0px'; }
+  head.addEventListener('click',()=>{ st.classList.toggle('open'); head.setAttribute('aria-expanded',st.classList.contains('open')); setH(); });
+  head.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();head.click();} });
+  setH(); window.addEventListener('resize',setH);
+});
+
+/* diagnosis accordion */
+document.querySelectorAll('.drow').forEach(d=>{
+  const btn=d.querySelector('button'), ans=d.querySelector('.dans');
+  btn.addEventListener('click',()=>{
+    d.classList.toggle('open');
+    btn.setAttribute('aria-expanded',d.classList.contains('open'));
+    ans.style.maxHeight = d.classList.contains('open') ? ans.scrollHeight+'px' : '0px';
+  });
+});
+
+/* gate persistence (localStorage) */
+(function(){
+  const KEY='earkeys-gates-v1';
+  let saved={}; try{ saved=JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){}
+  document.querySelectorAll('.gate input').forEach(cb=>{
+    cb.checked = !!saved[cb.dataset.k];
+    cb.addEventListener('change',()=>{ saved[cb.dataset.k]=cb.checked; try{localStorage.setItem(KEY,JSON.stringify(saved));}catch(e){} });
+  });
+})();
+
+/* ai prompt boxes: autosize + persistence + copy/reset */
+(function(){
+  const KEY='earkeys-prompts-v1';
+  let saved={}; try{ saved=JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){}
+  function persist(){ try{localStorage.setItem(KEY,JSON.stringify(saved));}catch(e){} }
+  function fit(ta){ ta.style.height='auto'; ta.style.height=Math.max(150, ta.scrollHeight+4)+'px'; }
+  function syncStage(ta){
+    const st=ta.closest('.stage');
+    if(st && st.classList.contains('open')){
+      const body=st.querySelector('.stage-body');
+      body.style.maxHeight='none'; /* let open panel grow freely with textarea */
+    }
+  }
+  document.querySelectorAll('.pbox').forEach(box=>{
+    const sid=box.dataset.stage;
+    const ta=box.querySelector('.pta');
+    const cc=box.querySelector('.cc');
+    const sv=box.querySelector('.saved');
+    const def=PROMPTS[Number(sid)]||'';
+    const k=ta.dataset.k;
+    ta.value = (saved[k]!=null) ? saved[k] : def;
+    function meta(){ cc.textContent = ta.value.length + ' 字' + (ta.value!==def ? ' · 已修改' : ' · 默认'); }
+    function flash(){ sv.classList.add('show'); clearTimeout(sv._t); sv._t=setTimeout(()=>sv.classList.remove('show'),1400); }
+    ta.addEventListener('input',()=>{
+      saved[k]=ta.value; persist(); fit(ta); meta(); syncStage(ta); flash();
+    });
+    box.querySelector('.copy-btn').addEventListener('click',async ev=>{
+      const b=ev.currentTarget;
+      try{ await navigator.clipboard.writeText(ta.value); }
+      catch(e){ ta.select(); document.execCommand('copy'); }
+      b.textContent='已复制'; b.classList.add('done');
+      setTimeout(()=>{b.textContent='复制';b.classList.remove('done');},1600);
+    });
+    box.querySelector('.reset-btn').addEventListener('click',ev=>{
+      ta.value=def; saved[k]=def; persist(); fit(ta); meta(); syncStage(ta);
+      const b=ev.currentTarget; b.textContent='已重置'; b.classList.add('done');
+      setTimeout(()=>{b.textContent='重置';b.classList.remove('done');},1400);
+    });
+    fit(ta); meta();
+  });
+  /* textareas changed panel heights — refresh open accordions */
+  function refreshOpen(){
+    document.querySelectorAll('.stage.open .stage-body').forEach(b=>{ b.style.maxHeight = b.scrollHeight+'px'; });
+  }
+  refreshOpen();
+  setTimeout(refreshOpen, 600); /* once fonts settle */
+})();
+
+/* scrollspy: top nav + rail */
+(function(){
+  const map=[['principles','#principles'],['daily','#daily'],['stages','#stages'],['lab','#lab'],['protocols','#protocols'],['tools','#tools'],['tests','#tests'],['check','#check']];
+  const topLinks=[...document.querySelectorAll('#topnav a')];
+  const railLinks=[...document.querySelectorAll('.rail-link')];
+  const secIO=new IntersectionObserver(es=>{
+    es.forEach(e=>{
+      if(e.isIntersecting){
+        topLinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id));
+      }
+    });
+  },{rootMargin:'-30% 0px -60% 0px'});
+  map.forEach(([id])=>{ const el=document.getElementById(id); if(el) secIO.observe(el); });
+  const stIO=new IntersectionObserver(es=>{
+    es.forEach(e=>{
+      if(e.isIntersecting){
+        railLinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id));
+      }
+    });
+  },{rootMargin:'-25% 0px -55% 0px'});
+  document.querySelectorAll('.stage').forEach(s=>stIO.observe(s));
+})();
+</script>
+</body>
+</html>
